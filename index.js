@@ -1,17 +1,18 @@
-const btnEl = document.getElementById("calculate");
-const billInput = document.getElementById("bill");
-const tipInput = document.getElementById("tip");
-const totalSpan = document.getElementById("total");
+const display = document.querySelector(".age");
+const age = document.querySelector(".para");
+const text = document.getElementById("inpt");
 
-btnEl.addEventListener("click", calculateTotal);
+display.addEventListener("click", displayAge);
 
-function calculateTotal() {
-  const billValue = Number(billInput.value);
-  const tipPercent = Number(tipInput.value);
-
-  const tipValue = (tipPercent / 100) * billValue;
-
-  const totalValue = billValue + tipValue;
-
-  totalSpan.innerText = totalValue.toFixed(2);
+function displayAge() {
+  const calculate = text.value;
+  if (calculate) {
+    const date = new Date();
+    const year = Number(date.getFullYear());
+    const previousYear = Number(calculate.split("-")[0]);
+    const presentYear = year - previousYear;
+    age.innerText = `Year age is ${presentYear}  years old`;
+  } else {
+    alert("please enter your birthday");
+  }
 }
