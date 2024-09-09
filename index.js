@@ -1,47 +1,49 @@
-const API_KEY = "275d58779ccf4e22af03e792e8819fff";
+const dice = document.querySelector(".dice");
+const button = document.querySelector(".btn");
+const history = document.querySelector(".history");
 
-const list = document.querySelector(".list");
+const historyStore = [];
 
-async function getRecipies() {
-  const response = await fetch(
-    `https://api.spoonacular.com/recipes/random?number=10&apiKey=${API_KEY}`
-  );
-  const responseData = await response.json();
-  return responseData.recipes;
+button.addEventListener("click", () => {
+  dice.classList.add("dice-animation");
+  setTimeout(() => {
+    dice.classList.remove("dice-animation");
+    diceChange();
+  }, 1000);
+});
+
+function diceChange() {
+  const randomNumber = Math.floor(Math.random() * 6) + 1;
+  const diceFace = chooseDice(randomNumber);
+  dice.innerHTML = diceFace;
+  historyStore.push(randomNumber);
+  updateHistory();
 }
 
-function display(recipies) {
-  recipies.forEach((recipie) => {
-    const li = document.createElement("li");
-    li.classList.add("list-item");
-
-    list.appendChild(li);
-
-    const img = document.createElement("img");
-    console.log("recipie", recipie);
-    img.src = recipie.image;
-    img.alt = "food image";
-    li.appendChild(img);
-
-    const heading = document.createElement("h3");
-    heading.innerText = recipie.title;
-    li.appendChild(heading);
-
-    const description = document.createElement("p");
-    description.innerHTML = `<strong>Ingredients:</strong> ${recipie.extendedIngredients.map(
-      (ingredient) => ingredient.original
-    )}`;
-    li.appendChild(description);
-
-    const link = document.createElement("a");
-    link.href = recipie.sourceUrl;
-    link.innerText = "VIEW RECIPE";
-    li.appendChild(link);
-  });
+function updateHistory() {
+  history.innerHTML = "";
+  for (let i = 0; i < historyStore.length; i++) {
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `Roll ${i + 1}: <span>${chooseDice(
+      historyStore[i]
+    )}</span>`;
+    history.appendChild(listItem);
+  }
 }
 
-async function init() {
-  const recipies = await getRecipies();
-  display(recipies);
+function chooseDice(n) {
+  switch (n) {
+    case 1:
+      return "&#9856;";
+    case 2:
+      return "&#9857;";
+    case 3:
+      return "&#9858;";
+    case 4:
+      return "&#9859;";
+    case 5:
+      return "&#9860;";
+    case 6:
+      return "&#9861;";
+  }
 }
-init();
